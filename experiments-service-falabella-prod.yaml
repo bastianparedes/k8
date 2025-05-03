@@ -1,0 +1,306 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "47"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"experiments-service-falabella-prod","argocd.argoproj.io/instance":"experiments-service-falabella-prod","chart":"falabella-0.1.2","release":"experiments-service-falabella-prod","tags.datadoghq.com/env":"prod","tags.datadoghq.com/service":"experiments-service-falabella-prod","tags.datadoghq.com/version":"1.0"},"name":"experiments-service-falabella-prod","namespace":"falabella"},"spec":{"selector":{"matchLabels":{"app":"experiments-service-falabella-prod","release":"experiments-service-falabella-prod"}},"template":{"metadata":{"annotations":{"ad.datadoghq.com/experiments-service.logs":"[{\"source\":\"nodejs\"}]","ad.datadoghq.com/tags":"{\"app\":\"experiments-service\",\"role\": \"backend\",\"sre_team\":\"falabella\",\"team\":\"falabella\",\"retention\":\"15D\",\"country\":\"corp\",\"bu\":\"corp\",\"bs-dom\":\"falabella\",\"bs-cap\":\"falabella\",\"ind\":\"corp\",\"cc-name\":\"commerce\",\"cc-id\":\"98006263\"}","cluster-autoscaler.kubernetes.io/safe-to-evict":"true"},"labels":{"app":"experiments-service-falabella-prod","release":"experiments-service-falabella-prod","tags.datadoghq.com/env":"prod","tags.datadoghq.com/service":"experiments-service-falabella-prod","tags.datadoghq.com/version":"1.0","version":"v1"}},"spec":{"containers":[{"env":[{"name":"DD_AGENT_HOST","valueFrom":{"fieldRef":{"fieldPath":"status.hostIP"}}},{"name":"DD_ENV","valueFrom":{"fieldRef":{"fieldPath":"metadata.labels['tags.datadoghq.com/env']"}}},{"name":"DD_SERVICE","valueFrom":{"fieldRef":{"fieldPath":"metadata.labels['tags.datadoghq.com/service']"}}},{"name":"DD_VERSION","valueFrom":{"fieldRef":{"fieldPath":"metadata.labels['tags.datadoghq.com/version']"}}},{"name":"PORT","value":"4444"},{"name":"SERVICE_VERSION","value":"9d7459e0"},{"name":"DD_LOGS_INJECTION","value":"true"},{"name":"DD_PROFILING_ENABLED","value":"false"},{"name":"DD_TRACE_ENABLED","value":"true"},{"name":"GCLOUD_PROJECT","value":"falabella-catalyst-bu-prod"},{"name":"HOST","value":"0.0.0.0"},{"name":"PROJECT_ID","value":"falabella-catalyst-bu-prod"}],"image":"registry.falabella.tech/digital-retail/bu/falabella/b2c/services/experiments:9d7459e0","imagePullPolicy":"Always","name":"experiments-service-falabella-prod","ports":[{"containerPort":4444,"name":"http","protocol":"TCP"}],"resources":{"limits":{"cpu":"200m","memory":"200Mi"},"requests":{"cpu":"100m","memory":"100Mi"}},"volumeMounts":null}],"imagePullSecrets":[{"name":"experiments-service-falabella-prod-docker"}],"volumes":null}}}}
+  creationTimestamp: "2024-04-25T13:29:02Z"
+  generation: 64
+  labels:
+    app: experiments-service-falabella-prod
+    argocd.argoproj.io/instance: experiments-service-falabella-prod
+    chart: falabella-0.1.2
+    release: experiments-service-falabella-prod
+    tags.datadoghq.com/env: prod
+    tags.datadoghq.com/service: experiments-service-falabella-prod
+    tags.datadoghq.com/version: "1.0"
+  managedFields:
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:replicas: {}
+    manager: vpa-recommender
+    operation: Update
+    subresource: scale
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:argocd.argoproj.io/instance: {}
+          f:chart: {}
+          f:release: {}
+          f:tags.datadoghq.com/env: {}
+          f:tags.datadoghq.com/service: {}
+          f:tags.datadoghq.com/version: {}
+      f:spec:
+        f:progressDeadlineSeconds: {}
+        f:revisionHistoryLimit: {}
+        f:selector: {}
+        f:strategy:
+          f:rollingUpdate:
+            .: {}
+            f:maxSurge: {}
+            f:maxUnavailable: {}
+          f:type: {}
+        f:template:
+          f:metadata:
+            f:annotations:
+              .: {}
+              f:ad.datadoghq.com/experiments-service.logs: {}
+              f:ad.datadoghq.com/tags: {}
+              f:cluster-autoscaler.kubernetes.io/safe-to-evict: {}
+            f:labels:
+              .: {}
+              f:app: {}
+              f:release: {}
+              f:tags.datadoghq.com/env: {}
+              f:tags.datadoghq.com/service: {}
+              f:tags.datadoghq.com/version: {}
+              f:version: {}
+          f:spec:
+            f:containers:
+              k:{"name":"experiments-service-falabella-prod"}:
+                .: {}
+                f:env:
+                  .: {}
+                  k:{"name":"DD_AGENT_HOST"}:
+                    .: {}
+                    f:name: {}
+                    f:valueFrom:
+                      .: {}
+                      f:fieldRef: {}
+                  k:{"name":"DD_ENV"}:
+                    .: {}
+                    f:name: {}
+                    f:valueFrom:
+                      .: {}
+                      f:fieldRef: {}
+                  k:{"name":"DD_LOGS_INJECTION"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"DD_PROFILING_ENABLED"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"DD_SERVICE"}:
+                    .: {}
+                    f:name: {}
+                    f:valueFrom:
+                      .: {}
+                      f:fieldRef: {}
+                  k:{"name":"DD_TRACE_ENABLED"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"DD_VERSION"}:
+                    .: {}
+                    f:name: {}
+                    f:valueFrom:
+                      .: {}
+                      f:fieldRef: {}
+                  k:{"name":"GCLOUD_PROJECT"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"HOST"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"PORT"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"PROJECT_ID"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                  k:{"name":"SERVICE_VERSION"}:
+                    .: {}
+                    f:name: {}
+                    f:value: {}
+                f:image: {}
+                f:imagePullPolicy: {}
+                f:name: {}
+                f:ports:
+                  .: {}
+                  k:{"containerPort":4444,"protocol":"TCP"}:
+                    .: {}
+                    f:containerPort: {}
+                    f:name: {}
+                    f:protocol: {}
+                f:resources:
+                  .: {}
+                  f:limits:
+                    .: {}
+                    f:cpu: {}
+                    f:memory: {}
+                  f:requests:
+                    .: {}
+                    f:cpu: {}
+                    f:memory: {}
+                f:terminationMessagePath: {}
+                f:terminationMessagePolicy: {}
+            f:dnsPolicy: {}
+            f:imagePullSecrets:
+              .: {}
+              k:{"name":"experiments-service-falabella-prod-docker"}: {}
+            f:restartPolicy: {}
+            f:schedulerName: {}
+            f:securityContext: {}
+            f:terminationGracePeriodSeconds: {}
+    manager: argocd-controller
+    operation: Update
+    time: "2024-10-21T19:14:58Z"
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:deployment.kubernetes.io/revision: {}
+      f:status:
+        f:availableReplicas: {}
+        f:conditions:
+          .: {}
+          k:{"type":"Available"}:
+            .: {}
+            f:lastTransitionTime: {}
+            f:lastUpdateTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"Progressing"}:
+            .: {}
+            f:lastTransitionTime: {}
+            f:lastUpdateTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+        f:observedGeneration: {}
+        f:readyReplicas: {}
+        f:replicas: {}
+        f:updatedReplicas: {}
+    manager: kube-controller-manager
+    operation: Update
+    subresource: status
+    time: "2025-04-25T06:50:13Z"
+  name: experiments-service-falabella-prod
+  namespace: falabella
+  resourceVersion: "1962798175"
+  uid: ca3d88c1-fc89-4aed-b11d-c34a75872c3a
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 5
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: experiments-service-falabella-prod
+      release: experiments-service-falabella-prod
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        ad.datadoghq.com/experiments-service.logs: '[{"source":"nodejs"}]'
+        ad.datadoghq.com/tags: '{"app":"experiments-service","role": "backend","sre_team":"falabella","team":"falabella","retention":"15D","country":"corp","bu":"corp","bs-dom":"falabella","bs-cap":"falabella","ind":"corp","cc-name":"commerce","cc-id":"98006263"}'
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+      creationTimestamp: null
+      labels:
+        app: experiments-service-falabella-prod
+        release: experiments-service-falabella-prod
+        tags.datadoghq.com/env: prod
+        tags.datadoghq.com/service: experiments-service-falabella-prod
+        tags.datadoghq.com/version: "1.0"
+        version: v1
+    spec:
+      containers:
+      - env:
+        - name: DD_AGENT_HOST
+          value: nginx-mirror.tracing.svc.cluster.local
+        - name: DD_ENV
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.labels['tags.datadoghq.com/env']
+        - name: DD_SERVICE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.labels['tags.datadoghq.com/service']
+        - name: DD_VERSION
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.labels['tags.datadoghq.com/version']
+        - name: PORT
+          value: "4444"
+        - name: SERVICE_VERSION
+          value: 9d7459e0
+        - name: DD_LOGS_INJECTION
+          value: "true"
+        - name: DD_PROFILING_ENABLED
+          value: "false"
+        - name: DD_TRACE_ENABLED
+          value: "true"
+        - name: GCLOUD_PROJECT
+          value: falabella-catalyst-bu-prod
+        - name: HOST
+          value: 0.0.0.0
+        - name: PROJECT_ID
+          value: falabella-catalyst-bu-prod
+        image: registry.falabella.tech/digital-retail/bu/falabella/b2c/services/experiments:9d7459e0
+        imagePullPolicy: Always
+        name: experiments-service-falabella-prod
+        ports:
+        - containerPort: 4444
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 200m
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: experiments-service-falabella-prod-docker
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 5
+  conditions:
+  - lastTransitionTime: "2024-05-27T14:21:38Z"
+    lastUpdateTime: "2024-09-10T17:11:39Z"
+    message: ReplicaSet "experiments-service-falabella-prod-79687d4974" has successfully
+      progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2025-02-13T02:54:37Z"
+    lastUpdateTime: "2025-02-13T02:54:37Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 64
+  readyReplicas: 5
+  replicas: 5
+  updatedReplicas: 5

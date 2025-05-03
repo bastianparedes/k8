@@ -1,0 +1,303 @@
+---
+include:
+
+  - project: "digital-retail/ci-reuse/build/docker"
+    ref: master
+    file: ".gitlab-ci.yml"
+  - project: 'digital-retail/ci-reuse/deploy/gcloud/helm3'
+    ref: master
+  - project: "digital-retail/ci-reuse/audit/dependency-check"
+    ref: devsecops
+    file: "/template/.ci-template.yml"
+  - project: "digital-retail/ci-reuse/audit/clair"
+    ref: stable_v3
+    file: "/template/.ci-template.yml"
+  - project: "digital-retail/ci-reuse/audit/nodejs-scan"
+    ref: stable
+    file: "/template/.ci-template.yml"
+
+variables:
+  YAMLLINT_INPUT: ".gitlab-ci.yml"
+  CI_PROJECT_NAME: "experiments-service"
+  DOCKER_BUILD_ARG: "--build-arg NPM_TOKEN"
+  NPM_USERNAME: ${NPM_USERNAME}
+  NPM_TOKEN: ${NPM_TOKEN}
+  NPM_EMAIL: ${NPM_EMAIL}
+  PROJECT_NAME: "${CI_PROJECT_NAME}"
+  ARGO_CI_PROJECT_NAME: "${CI_PROJECT_NAME}"
+  DC_TARGET_LANG: "node"
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - build-cache
+  - lint
+  - test
+  - build
+  - audit
+  - dev-deploy
+  - staging-deploy
+  - prod-deploy
+
+.deploy_argo_template_falabella: &deploy_argo_template
+  image: alpine:3.20
+  before_script:
+    - |
+      echo "Instalando herramientas necesarias (git y yq)..."
+      apk add --no-cache git yq
+
+      echo "Configurando credenciales de Git para acceso al repositorio..."
+      echo "https://${ARGO_ACCESS_USER}:${ARGO_ACCESS_TOKEN}@${CI_SERVER_HOST}" > ~/.git-credentials
+      git config --global credential.helper store
+      git config --global user.email "$GITLAB_USER_EMAIL"
+      git config --global user.name "$GITLAB_USER_NAME"
+
+      echo "Clonando el repositorio GitOps desde: https://${GIT_OPS_REPO_FALABELLA}"
+      git clone https://${GIT_OPS_REPO_FALABELLA} gitops && cd gitops
+
+  script:
+    - |
+      echo "Actualizando el tag de imagen en los valores de Helm con el commit actual..."
+      tag=${CI_COMMIT_SHORT_SHA} yq eval '.falabella.image.tag = env(tag)' -i ${HELM_PATH_VALUES}
+
+      echo "Haciendo pull de los últimos cambios (por si hay actualizaciones remotas)..."
+      git pull
+
+      echo "Agregando los cambios al stage de Git..."
+      git add .
+
+      echo "Creando commit con mensaje de despliegue..."
+      git commit -m "CI: Deploy $CI_PROJECT_NAME service ($CI_ENVIRONMENT_NAME) -> Commit: $CI_COMMIT_SHORT_SHA"
+
+      echo "Pusheando los cambios al repositorio remoto..."
+      git push
+
+
+.deploy_argo_template_sodimac: &deploy_argo_template
+  image: alpine:3.20
+  before_script:
+    - |
+      apk add --no-cache git yq
+      echo "https://${ARGO_ACCESS_USER}:${ARGO_ACCESS_TOKEN}@${CI_SERVER_HOST}" > ~/.git-credentials
+      git config --global credential.helper store
+      git config --global user.email "$GITLAB_USER_EMAIL"
+      git config --global user.name "$GITLAB_USER_NAME"
+      git clone https://${GIT_OPS_REPO_SODIMAC} gitops && cd gitops
+  script:
+    - |
+      tag=${CI_COMMIT_SHORT_SHA} yq eval '.sodimac.image.tag = env(tag)' -i ${HELM_PATH_VALUES}
+      git pull && git add .
+      git commit -m "CI: Deploy $CI_PROJECT_NAME service ($CI_ENVIRONMENT_NAME) -> Commit: $CI_COMMIT_SHORT_SHA"
+      git push
+# building the artifact
+build-cache:
+  stage: build-cache
+  image: node:22.14.0-alpine3.20
+  before_script:
+    - |
+      npm config set @digital-retail:registry=https://gitlab.falabella.tech/api/v4/packages/npm/
+      export AUTH=$(echo "$NPM_TOKEN")
+      npm config set //gitlab.falabella.tech/api/v4/packages/npm/:_authToken=$AUTH
+      npm config set //gitlab.falabella.tech/api/v4/projects/66385/packages/npm/:_authToken=$AUTH
+  script:
+    - npm ci --no-audit
+  artifacts:
+    paths:
+      - node_modules
+    name: ${CI_JOB_ID}
+    expire_in: 1 hour
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  tags:
+    - catalyst-docker
+
+dockerfile:
+  stage: lint
+  tags:
+    - catalyst-docker
+
+yaml:
+  stage: lint
+  tags:
+    - catalyst-docker
+
+dependency-check-prd:
+  tags:
+    - catalyst-docker
+
+node:
+  stage: lint
+  dependencies:
+    - build-cache
+  image: node:22.14.0-alpine3.20
+  script:
+    - npm run lint
+  tags:
+    - catalyst-docker
+
+clair-analysis-dev:
+  stage: audit
+  tags:
+    - catalyst-docker
+
+dependency-check-analysis:
+  stage: audit
+  tags:
+    - catalyst-docker
+
+npm:
+  stage: audit
+  dependencies:
+    - build-cache
+  image: node:22.14.0-alpine3.20
+  script:
+    - npm run better:audit
+  tags:
+    - catalyst-docker
+
+unit_tests:
+  stage: test
+  dependencies:
+    - build-cache
+  image: node:22.14.0-alpine3.20
+  script:
+    - npm run test
+  coverage: /^All files[^|]*\|[^|]*\s+([\d\.]+)/
+  artifacts:
+    paths:
+      - coverage/
+    when: always
+    reports:
+      junit:
+        - junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+  tags:
+    - catalyst-docker
+
+clair-analysis:
+  before_script:
+    - export SCAN_IMAGE="${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA:0:8}"
+    - export REGISTRY_USER='gitlab-ci-token'
+    - export REGISTRY_PASSWORD="${CI_JOB_TOKEN}"
+  tags:
+    - catalyst-docker
+
+# ################################
+# # deploy Falabella
+# ###############################
+
+deploy:falabella:dev:
+  extends: .deploy_argo_template_falabella
+  stage: dev-deploy
+  variables:
+    HELM_PATH_VALUES: "helm/${CI_PROJECT_NAME}/dev/values.yaml"
+  environment:
+    name: dev
+  when: manual
+  tags:
+    - catalyst-docker
+
+deploy:falabella:staging:
+  extends: .deploy_argo_template_falabella
+  stage: staging-deploy
+  variables:
+    HELM_PATH_VALUES: "helm/${CI_PROJECT_NAME}/staging/values.yaml"
+  dependencies:
+    - deploy:falabella:dev
+  environment:
+    name: staging
+  when: manual
+  tags:
+    - catalyst-docker
+
+deploy:falabella:prod:
+  extends: .deploy_argo_template_falabella
+  stage: prod-deploy
+  variables:
+    HELM_PATH_VALUES: "helm/${CI_PROJECT_NAME}/prod/values.yaml"
+  dependencies:
+    - deploy:falabella:staging
+  environment:
+    name: production
+  # only:
+    # - tags
+  when: manual
+  tags:
+    - catalyst-docker
+
+deploy:falabella:dr:
+  extends: .deploy_argo_template_falabella
+  stage: prod-deploy
+  variables:
+    HELM_PATH_VALUES: "helm/${CI_PROJECT_NAME}/dr/values.yaml"
+  dependencies:
+    - deploy:falabella:prod
+  environment:
+    name: production
+  # only:
+    # - tags
+  when: manual
+  tags:
+    - catalyst-docker
+
+# ################################
+# # deploy Sodimac
+# ###############################
+
+deploy:sodimac:dev:
+  extends: .deploy_argo_template_sodimac
+  stage: dev-deploy
+  variables:
+    HELM_PATH_VALUES: "helm/${CI_PROJECT_NAME}/dev/values.yaml"
+  environment:
+    name: dev
+  when: manual
+  tags:
+    - catalyst-docker
+
+deploy:sodimac:staging:
+  extends: .deploy_argo_template_sodimac
+  stage: staging-deploy
+  variables:
+    HELM_PATH_VALUES: "helm/${CI_PROJECT_NAME}/staging/values.yaml"
+  dependencies:
+    - deploy:sodimac:dev
+  environment:
+    name: staging
+  when: manual
+  tags:
+    - catalyst-docker
+
+deploy:sodimac:prod:
+  extends: .deploy_argo_template_sodimac
+  stage: prod-deploy
+  variables:
+    HELM_PATH_VALUES: "helm/${CI_PROJECT_NAME}/prod/values.yaml"
+  dependencies:
+    - deploy:sodimac:staging
+  environment:
+    name: production
+  # only:
+    # - tags
+  when: manual
+  tags:
+    - catalyst-docker
+
+deploy:sodimac:dr:
+  extends: .deploy_argo_template_sodimac
+  stage: prod-deploy
+  variables:
+    HELM_PATH_VALUES: "helm/${CI_PROJECT_NAME}/dr/values.yaml"
+  dependencies:
+    - deploy:sodimac:prod
+  environment:
+    name: production
+  # only:
+    # - tags
+  when: manual
+  tags:
+    - catalyst-docker
