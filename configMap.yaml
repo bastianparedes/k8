@@ -11,23 +11,13 @@ data:
       server {
         listen 80;
 
-        # Redirigir /path1 a /path1/
-        location = /path1 {
-          return 301 http://$host:$http_x_forwarded_port/path1/;
-        }
-
         location ^~ /path1/ {
-          rewrite ^/path1(/.*)$ $1 break;
+          rewrite ^/path1(/.*)?$ $1 break;
           proxy_pass http://back1-service.namespace1.svc.cluster.local;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Proto $scheme;
-        }
-
-        # Redirigir /path2 a /path2/
-        location = /path2 {
-          return 301 http://$host:$http_x_forwarded_port/path2/;
         }
 
         location ^~ /path2/ {
