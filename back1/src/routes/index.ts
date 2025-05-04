@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 
 const routes = async (server: FastifyInstance) => {
   server.get('/', {}, async (_req, reply) => {
+    console.log('ayuda desde back 1');
     const response = await fetch(
       'http://back2-service.namespace2.svc.cluster.local'
     );
