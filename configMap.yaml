@@ -11,12 +11,12 @@ data:
         listen 80;
 
         location /path1/ {
-          rewrite ^/path1(/.*)$ $1 break;
           proxy_pass http://back1-service.namespace1.svc.cluster.local;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Proto $scheme;
+          rewrite ^/path1(/.*)$ $1 break;
         }
 
         location /path2/ {
@@ -26,6 +26,7 @@ data:
           proxy_set_header X-Real-IP $remote_addr;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Proto $scheme;
+          rewrite ^/path2(/.*)$ $1 break;
         }
       }
     }
