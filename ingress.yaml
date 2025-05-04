@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    http:
+  - http:
       paths:
       - path: /path1
         pathType: Prefix
@@ -22,6 +22,6 @@ spec:
         backend:
           service:
             name: back2-service
-            namespace: namespace2
+            namespace: namespace2  # Especificar el namespace del servicio
             port:
               number: 80
