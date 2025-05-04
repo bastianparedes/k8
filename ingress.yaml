@@ -15,7 +15,6 @@ spec:
         backend:
           service:
             name: back1-service
-            namespace: namespace1
             port:
               number: 80
       - path: /path2
@@ -23,6 +22,5 @@ spec:
         backend:
           service:
             name: back2-service
-            namespace: namespace2
             port:
               number: 80
