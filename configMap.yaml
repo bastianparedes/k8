@@ -10,7 +10,7 @@ data:
       server {
         listen 80;
 
-        location /path1 {
+        location ^~ /path1 {
           proxy_pass http://back1-service.namespace1.svc.cluster.local;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
@@ -19,7 +19,7 @@ data:
           rewrite ^/path1(/.*)$ $1 break;
         }
 
-        location /path2 {
+        location ^~ /path2 {
           rewrite ^/path2(/.*)$ $1 break;
           proxy_pass http://back2-service.namespace2.svc.cluster.local;
           proxy_set_header Host $host;
