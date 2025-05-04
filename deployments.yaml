@@ -33,7 +33,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: back1-deployment
-  namespace: namespace1
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -57,7 +57,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: back2-deployment
-  namespace: namespace2
+  namespace: default
 spec:
   replicas: 1
   selector:

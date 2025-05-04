@@ -18,7 +18,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: back1-service
-  namespace: namespace1
+  namespace: default
 spec:
   selector:
     app: back1
@@ -34,7 +34,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: back2-service
-  namespace: namespace2
+  namespace: default
 spec:
   selector:
     app: back2
