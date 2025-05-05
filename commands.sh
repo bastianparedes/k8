@@ -11,3 +11,7 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
 kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8081:80
+
+brew install helm
+
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/master/manifests/install.yaml
