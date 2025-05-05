@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app
+spec:
+  destination:
+    namespace: ''
+    server: https://kubernetes.default.svc
+  source:
+    path: .
+    repoURL: https://github.com/bastianparedes/k8
+    targetRevision: HEAD
+  sources: []
+  project: default
