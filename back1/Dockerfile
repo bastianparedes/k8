@@ -10,8 +10,8 @@ ENV CI=true
 WORKDIR /app
 
 RUN	echo "$NPM_USERNAME:$NPM_TOKEN" > /tmp/auth
-RUN apk add --no-cache binutils=2.43.1-r2
-RUN apk add --no-cache python3=3.12.10-r0
+RUN apk add --no-cache binutils=2.43.1-r3
+RUN apk add --no-cache python3=3.12.11-r0
 RUN apk add --no-cache make=4.4.1-r2
 RUN apk add --no-cache g++=14.2.0-r4
 RUN apk add --no-cache tini=0.19.0-r3
