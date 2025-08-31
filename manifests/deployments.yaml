@@ -35,7 +35,7 @@ metadata:
   name: back1-deployment
   namespace: default
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: back1
@@ -59,7 +59,7 @@ metadata:
   name: back2-deployment
   namespace: default
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: back2
