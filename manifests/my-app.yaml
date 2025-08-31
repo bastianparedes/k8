@@ -4,11 +4,10 @@ metadata:
   name: my-app
 spec:
   destination:
-    namespace: ''
+    namespace: default
     server: https://kubernetes.default.svc
   source:
-    path: .
+    path: ./manifests
     repoURL: https://github.com/bastianparedes/k8
     targetRevision: HEAD
-  sources: []
   project: default
