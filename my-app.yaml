@@ -2,18 +2,20 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: my-app
-  annotations:
-    argocd.argoproj.io/sync-options: CreateNamespace=true
 spec:
   destination:
-    namespace: default
+    namespace: ''
     server: https://kubernetes.default.svc
   source:
-    path: /manifests
+    path: ./manifests
     repoURL: https://github.com/bastianparedes/k8
     targetRevision: HEAD
+    directory:
+      recurse: true
+  sources: []
   project: default
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+      enabled: true
