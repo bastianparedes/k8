@@ -8,9 +8,9 @@ docker build -t back2:latest -f ./back2/Dockerfile ./back2
 
 # cada uno por separado en local expone los puertos (solo uno a la vez y solo para debugeear en local)
 # fijarme si el namespace está en namespace1 o default
-kubectl port-forward service/back1-service 3000:80 -n namespace1
-kubectl port-forward service/back2-service 3000:80 -n namespace1
-kubectl port-forward service/nginx-service 8081:80 -n namespace1
+kubectl port-forward service/back1-service 3000:80 -n default
+kubectl port-forward service/back2-service 3000:80 -n default
+kubectl port-forward service/nginx-service 8081:80 -n default
 
 # instala argocd
 kubectl create namespace argocd
