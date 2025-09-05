@@ -21,3 +21,9 @@ kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.pas
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
 kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8081:80
+
+# para poder crear y apuntar al ingress
+minikube addons enable ingress
+minikube tunnel
+curl --resolve "kubernetes.local:80:127.0.0.1" -i http://kubernetes.local
+curl --resolve "kubernetes.local:80:127.0.0.1" -i http://kubernetes.local/common
