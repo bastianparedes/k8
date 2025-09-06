@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: back-1-deployment
-  namespace: {{ . }}
+  namespace: default
 spec:
   replicas: {{ $.Values.back-1.replicaCount }}
   selector:
