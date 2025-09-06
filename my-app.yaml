@@ -10,8 +10,9 @@ spec:
     path: ./manifests
     repoURL: https://github.com/bastianparedes/k8
     targetRevision: HEAD
-    directory:
-      recurse: true
+    helm:
+      valueFiles:
+        - values.yaml
   sources: []
   project: default
   syncPolicy:
