@@ -4,7 +4,7 @@ metadata:
   name: back-1-deployment
   namespace: default
 spec:
-  replicas: {{ .Values.back-1.replicaCount }}
+  replicas: {{ index .Values "back-1" "replicaCount" }}
   selector:
     matchLabels:
       app: back-1
