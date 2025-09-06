@@ -1,1 +1,7 @@
-replicaCount: 6
+namespaces:
+  - default
+  - prod
+  - beta
+
+back-1:
+  replicaCount: 2
