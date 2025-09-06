@@ -13,13 +13,13 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: back1-service
+                name: back-1-service
                 port:
                   number: 80
           - path: /common
             pathType: Prefix
             backend:
               service:
-                name: back2-service
+                name: back-2-service
                 port:
                   number: 80

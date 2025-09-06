@@ -7,7 +7,7 @@ const routes = async (server: FastifyInstance) => {
   });
 
   server.get('/common', {}, (req, reply) => {
-    reply.code(200).send('common desde back2');
+    reply.code(200).send('common desde back-2');
   });
 
   server.get('/back-2', {}, async (req, reply) => {

@@ -1,4 +1,3 @@
-{{- range .Values.namespaces }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,8 +15,6 @@ spec:
     spec:
       containers:
         - name: back-1-container
-          image: back1:latest
+          image: back-1:latest
           ports:
             - containerPort: 3000
----
-{{- end }}

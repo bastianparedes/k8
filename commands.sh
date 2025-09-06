@@ -3,13 +3,13 @@ minikube start
 
 # pone docker en conetxto minikube y buildea las imagenes
 eval $(minikube -p minikube docker-env)
-docker build -t back1:latest -f ./back1/Dockerfile ./back1
-docker build -t back2:latest -f ./back2/Dockerfile ./back2
+docker build -t back-1:latest -f ./back-1/Dockerfile ./back-1
+docker build -t back-2:latest -f ./back-2/Dockerfile ./back-2
 
 # cada uno por separado en local expone los puertos (solo uno a la vez y solo para debugeear en local)
 # fijarme si el namespace está en namespace1 o default
-kubectl port-forward service/back1-service 3000:80 -n default
-kubectl port-forward service/back2-service 3000:80 -n default
+kubectl port-forward service/back-1-service 3000:80 -n default
+kubectl port-forward service/back-2-service 3000:80 -n default
 kubectl port-forward service/nginx-service 8081:80 -n default
 
 # instala argocd

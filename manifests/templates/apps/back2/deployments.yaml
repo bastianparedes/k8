@@ -1,21 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: back2-deployment
-  namespace: default
+  name: back-2-deployment
+  namespace: {{ . }}
 spec:
-  replicas: 2
+  replicas: {{ $.Values.back-2.replicaCount }}
   selector:
     matchLabels:
-      app: back2
+      app: back-2
   template:
     metadata:
       labels:
-        app: back2
+        app: back-2
     spec:
       containers:
-        - name: back2-container
-          image: back2:latest
-          imagePullPolicy: Never
+        - name: back-2-container
+          image: back-2:latest
           ports:
             - containerPort: 3000
