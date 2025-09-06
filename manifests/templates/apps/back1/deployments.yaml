@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: back-1-deployment
-  namespace: default
+  namespace: {{ index .Values "back-1" "namespace" }}
 spec:
   replicas: {{ index .Values "back-1" "replicaCount" }}
   selector:
