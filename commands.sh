@@ -1,6 +1,9 @@
 # inicia minikube en local docker
 minikube start
 
+# crea los manifests con helm
+helm create manifests
+
 # pone docker en conetxto minikube y buildea las imagenes
 eval $(minikube -p minikube docker-env)
 docker build -t back-1:1.0.0 -f ./back-1/Dockerfile ./back-1
