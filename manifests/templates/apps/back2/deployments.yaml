@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: back-2-container
-          image: back-2:latest
+          image: back-2:{{ index .Values "back-2" "image-version" }}
           ports:
             - containerPort: 3000

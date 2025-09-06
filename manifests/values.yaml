@@ -1,7 +1,9 @@
 back-1:
   replicaCount: 2
   namespaces: default
+  image-version: 1.0.0
 
 back-2:
   replicaCount: 3
   namespaces: default
+  image-version: 1.0.0

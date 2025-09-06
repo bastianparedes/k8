@@ -3,8 +3,8 @@ minikube start
 
 # pone docker en conetxto minikube y buildea las imagenes
 eval $(minikube -p minikube docker-env)
-docker build -t back-1:latest -f ./back-1/Dockerfile ./back-1
-docker build -t back-2:latest -f ./back-2/Dockerfile ./back-2
+docker build -t back-1:1.0.0 -f ./back-1/Dockerfile ./back-1
+docker build -t back-2:1.0.0 -f ./back-2/Dockerfile ./back-2
 
 # cada uno por separado en local expone los puertos (solo uno a la vez y solo para debugeear en local)
 # fijarme si el namespace está en namespace1 o default
