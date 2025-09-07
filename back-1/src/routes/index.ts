@@ -2,12 +2,10 @@ import type { FastifyInstance } from 'fastify';
 
 const routes = async (server: FastifyInstance) => {
   server.get('/', {}, async (req, reply) => {
-    const response = await fetch(
-      'http://back-2-service.default.svc.cluster.local'
-    );
+    const response = await fetch(process.env.DOMAIN_BACK_2 as string);
 
     const json = await response.json();
-    reply.code(200).send({ responseBack2: json });
+    reply.code(200).send({ sentFromBack1: { responseBack2: json } });
   });
 
   server.get('/common', {}, (req, reply) => {
@@ -18,6 +16,9 @@ const routes = async (server: FastifyInstance) => {
     reply.code(200).send('back-1');
   });
 
+  server.get('/back-2-url', {}, async (req, reply) => {
+    reply.code(200).send(process.env.DOMAIN_BACK_2);
+  });
   return server;
 };
 

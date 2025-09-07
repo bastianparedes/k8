@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: back-1-config
+data:
+  DOMAIN_BACK_2: http://back-2-service.default.svc.cluster.local
+
